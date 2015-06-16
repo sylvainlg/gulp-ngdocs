@@ -242,6 +242,7 @@ docsApp.controller.DocsController = function($scope, $location, $window, section
       MODULE_FILTER = /^(.+)\.filters?:([^\.]+)$/,
       MODULE_CUSTOM = /^(.+)\.([^\.]+):([^\.]+)$/,
       MODULE_SERVICE = /^(.+)\.([^\.]+?)(Provider)?$/,
+	  MODULE_FACTORY = /^(.+)\.([^\.]+?)(Factory)?$/,
       MODULE_TYPE = /^([^\.]+)\..+\.([A-Z][^\.]+)$/;
 
 
@@ -420,6 +421,8 @@ docsApp.controller.DocsController = function($scope, $location, $window, section
         module(page.moduleName || match[1], section).directives.push(page);
       } else if (match = id.match(MODULE_DIRECTIVE_INPUT)) {
         module(page.moduleName || match[1], section).directives.push(page);
+      } else if (match = id.match(MODULE_FACTORY) && page.type === 'factory') {
+        module(page.moduleName || match[1], section).factories.push(page);
       } else if (match = id.match(MODULE_CUSTOM)) {
         if (page.type === 'service') {
           module(page.moduleName || match[1], section).service(match[3])[page.id.match(/^.+Provider$/) ? 'provider' : 'instance'] = page;
@@ -461,6 +464,7 @@ docsApp.controller.DocsController = function($scope, $location, $window, section
           controllers: [],
           directives: [],
           services: [],
+          factories: [],
           others: [],
           service: function(name) {
             var service =  cache[this.name + ':' + name];
